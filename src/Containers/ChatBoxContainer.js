@@ -30,16 +30,9 @@ const ChatBoxContainer = () => {
         let userAgentDevice =  navigator?.userAgent;
 
         if(userAgentDevice?.includes('Android')){
-
             setDeviceName('android');
-            // addToast('android' , { appearance: 'warning' });
-            // "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Mobile Safari/537.36"
-
         }else if(userAgentDevice?.includes('iPhone')){
-
-            // addToast('ios' , { appearance: 'warning' });
             setDeviceName('ios')
-
         }
 
 
@@ -57,74 +50,53 @@ const ChatBoxContainer = () => {
 
     let interval = null;
 
-    const handleGreetingMessages = async (guestUser, setLoading) =>{
-
+    const handleGreetingMessages = async (guestUser, setLoading) => {
         setChatText('');
-       await  axios.get(`https://silviaserver.com/SilviaServer/Core/GetAll?user=${guestUser}`)
-            .then((resp) => {
-                console.log(resp?.data, "getUser resoponse");
-
-                if(resp?.data?.success === true){
-
+    await axios
+        .get(`https://silviaserver.com/SilviaServer/Core/GetAll?user=${guestUser}`)
+        .then((resp) => {
+            if (resp?.data?.success === true) {
                 const { response } = resp?.data;
                 if (response.length > 0) {
                     setLoading(false);
-                    response.forEach((messages, index) => {
-                        const { results } = messages;
-                        results.forEach((message, index) => {
-                            if (index === 0) {
-                                if(message === "[silence]"){
+            const messages = response[0]?.results;
 
-                                }else{
-                                    setUserGreetMessages((prevState) => {
-                                        const latestState = [...prevState, {from: 'robot', type: 'text', message: message}]
-                                        return latestState;
-                                    })
-                                }
+            const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
+                    debugger;
 
-                            } else if (index === 1) {
-                                if(message === "[silence]"){
-
-                                }else{
-                                    setPlayedAudio((prevState) => {
-                                    const latestState = [...prevState, {from: 'robot', type: 'voice', url: message}]
-                                    return latestState;
-                                })
-
-
-                                    const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`
-                                    debugger
-                                   // var audio = new Audio(playedAudio);
-                                    let audio = new Audio(audioUrl);
-                                    audio.play();
-                                    //console.log(audio?.currentTime, audio?.currentSrc);
-                                    //debugger
-                                    //audio.pause();
-
-
-
-
-                                }
+                    let audio = new Audio(audioUrl);
+                    audio.play();
+                    audio.onended = function () {
+                        response.forEach(({ results }, index) => {
+                            if (index !== 0) {
+                                results?.forEach((message, index) => {
+                                    if (index === 0) {
+                                        if (message === '[silence]') {
+                                        }
+                                    } else if (index === 1) {
+                                        if (message === '[silence]') {
+                                        } else {
+                                            const audioUrl2 = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
+                                            let audio = new Audio(audioUrl2);
+                                            audio.play();
+                                        }
+                                    }
+                                });
                             }
-                        })
-                    })
-                }
-                }else{
-                    addToast('success false' , { appearance: 'warning' });
-                }
+                        });
+                    };
 
                 }
-            )
-            .catch((err) => {
-
-                addToast(err.message , { appearance: 'error' });
-                console.log(err?.message);
-                setLoading(false);
-            });
-
-    }
-
-    console.log(userGreetMessages);
+            } else {
+                addToast('success false', { appearance: 'warning' });
+            }
+        })
+        .catch((err) => {
+            addToast(err.message, { appearance: 'error' });
+            console.log(err?.message);
+            setLoading(false);
+        });
+    };
 
     const handleUserNameToken = async () => {
 
@@ -225,7 +197,6 @@ const ChatBoxContainer = () => {
     }
 
     const handleCloseChat = async  () => {
-
 
         const checkLocalStorage = localStorage.getItem('userNameToken');
 

@@ -877,53 +877,53 @@ const ChatBoxScreens = ({
 
 
 
-                               {playedAudio?.map((data) =>
-                                   data?.from === 'robot'?
-                                       <RobotProfileWrapper>
+                               {/*{playedAudio?.map((data) =>*/}
+                               {/*    data?.from === 'robot'?*/}
+                               {/*        <RobotProfileWrapper>*/}
 
-                                           <div style={{position: 'relative'}}>
-                                               <ChatBoxMessageWrapper>
-                                                   {
-                                                       toggleEnabled ?
+                               {/*            <div style={{position: 'relative'}}>*/}
+                               {/*                <ChatBoxMessageWrapper>*/}
+                               {/*                    {*/}
+                               {/*                        toggleEnabled ?*/}
 
-                                                          <AudioWrapper>
-                                                               <audio autoPlay onEnded={()=>alert('end and starting new')}>
-                                                                   <source type='audio/wav'
-                                                                           src={`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${data?.url}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`} />
-                                                               </audio>
-                                                          </AudioWrapper>
-                                                           : null
-                                                   }
+                               {/*                           <AudioWrapper>*/}
+                               {/*                                <audio autoPlay onEnded={()=>alert('end and starting new')}>*/}
+                               {/*                                    <source type='audio/wav'*/}
+                               {/*                                            src={`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${data?.url}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`} />*/}
+                               {/*                                </audio>*/}
+                               {/*                           </AudioWrapper>*/}
+                               {/*                            : null*/}
+                               {/*                    }*/}
 
 
-                                               </ChatBoxMessageWrapper>
+                               {/*                </ChatBoxMessageWrapper>*/}
 
-                                           </div>
-                                       </RobotProfileWrapper>
-                                       :
-                                       <UserProfileWrapper>
+                               {/*            </div>*/}
+                               {/*        </RobotProfileWrapper>*/}
+                               {/*        :*/}
+                               {/*        <UserProfileWrapper>*/}
 
-                                           <div style={{position: 'relative'}}>
-                                               <ChatBoxMessageWrapper>
-                                                   {
-                                                       toggleEnabled ?
-                                                           <AudioWrapper>
-                                                               <audio autoPlay>
-                                                                   <source type='audio/wav' src={`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${data?.url}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`} />
-                                                               </audio>
-                                                           </AudioWrapper>
-                                                           : null
+                               {/*            <div style={{position: 'relative'}}>*/}
+                               {/*                <ChatBoxMessageWrapper>*/}
+                               {/*                    {*/}
+                               {/*                        toggleEnabled ?*/}
+                               {/*                            <AudioWrapper>*/}
+                               {/*                                <audio autoPlay>*/}
+                               {/*                                    <source type='audio/wav' src={`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${data?.url}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`} />*/}
+                               {/*                                </audio>*/}
+                               {/*                            </AudioWrapper>*/}
+                               {/*                            : null*/}
 
-                                                   }
-                                               </ChatBoxMessageWrapper>
+                               {/*                    }*/}
+                               {/*                </ChatBoxMessageWrapper>*/}
 
-                                           </div>
-                                           <UserProfileImageWrapper>
-                                               <BsFillPersonFill size={22} color={'white'} />
-                                           </UserProfileImageWrapper>
-                                       </UserProfileWrapper>
+                               {/*            </div>*/}
+                               {/*            <UserProfileImageWrapper>*/}
+                               {/*                <BsFillPersonFill size={22} color={'white'} />*/}
+                               {/*            </UserProfileImageWrapper>*/}
+                               {/*        </UserProfileWrapper>*/}
 
-                               )}
+                               {/*)}*/}
 
                            </div>
 
