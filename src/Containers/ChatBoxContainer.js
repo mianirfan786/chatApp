@@ -3,11 +3,6 @@ import ChatBoxScreens from "../Screens/ChatBoxScreens";
 import {useToasts} from "react-toast-notifications";
 import {nanoid} from "nanoid";
 import axios from "axios";
-import {message} from "antd";
-import RecordRTC from 'recordrtc';
-import {invokeSaveAsDialog} from 'recordrtc';
-
-
 const ChatBoxContainer = () => {
 
     const {addToast} = useToasts();
@@ -22,6 +17,7 @@ const ChatBoxContainer = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [playedAudio, setPlayedAudio] = useState([]);
     const [deviceName, setDeviceName] = useState('');
+
 
 
     useEffect(()=> {
@@ -47,7 +43,6 @@ const ChatBoxContainer = () => {
         setDeleteModalOpen(false);
     };
 
-
     let interval = null;
 
     const handleGreetingMessages = async (guestUser, setLoading) => {
@@ -59,32 +54,83 @@ const ChatBoxContainer = () => {
                 const { response } = resp?.data;
                 if (response.length > 0) {
                     setLoading(false);
-            const messages = response[0]?.results;
+                    if(toggleEnabled){
+                        const messages = response[0]?.results;
+                        if(messages[0] !== '[silence]'){
+                            setUserGreetMessages((prevState) => {
+                                const latestState = [...prevState, {
+                                    from: 'robot',
+                                    type: 'text',
+                                    message: messages[0]
+                                }]
+                                return latestState;
+                            });
+                        }
 
-            const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
-                    debugger;
+                        const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
+                        debugger;
 
-                    let audio = new Audio(audioUrl);
-                    audio.play();
-                    audio.onended = function () {
-                        response.forEach(({ results }, index) => {
-                            if (index !== 0) {
-                                results?.forEach((message, index) => {
-                                    if (index === 0) {
-                                        if (message === '[silence]') {
+                        let audio = new Audio(audioUrl);
+                        audio.play();
+
+                        audio.onended = function () {
+                            response.forEach(({ results }, index) => {
+                                if (index !== 0) {
+                                    results?.forEach((message, index) => {
+                                        if (index === 0) {
+                                            if (message === '[silence]') {
+                                            }else{
+                                                setUserGreetMessages((prevState) => {
+                                                    const latestState = [...prevState, {
+                                                        from: 'robot',
+                                                        type: 'text',
+                                                        message: message
+                                                    }]
+                                                    return latestState;
+                                                });
+                                            }
+                                        } else if (index === 1) {
+                                            if (message === '[silence]') {
+                                            } else {
+                                                if(toggleEnabled){
+                                                    const audioUrl2 = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
+                                                    let audio = new Audio(audioUrl2);
+                                                    audio.play();
+                                                }
+
+                                            }
                                         }
-                                    } else if (index === 1) {
-                                        if (message === '[silence]') {
-                                        } else {
-                                            const audioUrl2 = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
-                                            let audio = new Audio(audioUrl2);
-                                            audio.play();
-                                        }
+                                    });
+                                }
+                            });
+                        };
+
+                    }else{
+                        response.forEach((messages, index) => {
+                            const {results} = messages;
+                            results.forEach((message, index) => {
+                                if (index === 0) {
+                                    if (message === "[silence]") {
+
+                                    } else {
+                                        setUserGreetMessages((prevState) => {
+                                            const latestState = [...prevState, {
+                                                from: 'robot',
+                                                type: 'text',
+                                                message: message
+                                            }]
+                                            return latestState;
+                                        })
                                     }
-                                });
-                            }
-                        });
-                    };
+                                }
+                            })
+                        })
+
+                    }
+
+
+
+
 
                 }
             } else {
@@ -244,84 +290,9 @@ const ChatBoxContainer = () => {
 
     const handleMicPermissions = async () => {
 
-        //
-        // navigator.mediaDevices.getUserMedia({audio:true})
-        //     .then(function onSuccess(stream) {
-        //         const recorder = new MediaRecorder(stream);
-        //         debugger
-        //
-        //         const data = [];
-        //         recorder.ondataavailable = (e) => {
-        //             data.push(e.data);
-        //         };
-        //         debugger
-        //         recorder.start();
-        //         recorder.onerror = (e) => {
-        //             debugger
-        //             throw e.error || new Error(e.name); // e.name is FF non-spec
-        //         }
-        //         recorder.onstop = (e) => {
-        //             debugger
-        //             const audio = document.createElement('audio');
-        //             audio.src = window.URL.createObjectURL(new Blob(data));
-        //         }
-        //         setTimeout(() => {
-        //             recorder.stop();
-        //         }, 5000);
-        //     })
-        //     .catch(function onError(error) {
-        //         debugger
-        //         console.log(error.message);
-        //     });
-
-        // navigator.mediaDevices.getUserMedia({
-        //     video: false,
-        //     audio: true
-        // }).then(async function(stream) {
-        //   debugger
-        //     let recorder = RecordRTC(stream, {
-        //         type: 'audio'
-        //     });
-        //   debugger
-        //     recorder.startRecording();
-        //     setMicEnabled(!micEnabled);
-        //     debugger
-        //     const sleep = m => new Promise(r => setTimeout(r, m));
-        //     await sleep(3000);
-        //     debugger
-        //     recorder.stopRecording(function() {
-        //         debugger
-        //               const dataNew =   window.URL.createObjectURL(new Blob(recorder))
-        //         let blobNew = recorder.getBlob();
-        //         debugger
-        //         const resBlob =   axios.get(`https://208.109.188.242:2700/${blobNew}`)
-        //               .then((resp) => {
-        //                   debugger
-        //                   console.log(resp)
-        //
-        //
-        //                   }
-        //               )
-        //               .catch((err) => {
-        //                  debugger
-        //                   console.log(err?.response)
-        //               });
-        //
-        //         invokeSaveAsDialog(blobNew);
-        //     });
-        // });
-        const permissions = navigator.mediaDevices.getUserMedia({audio: true, video: false})
-        permissions.then((stream) => {
-            setMicEnabled(!micEnabled);
-
-        }).catch((err) => {
-
-            setMicEnabled(false);
-            addToast(err.message , { appearance: 'error' });
-            console.log(`${err.name} : ${err.message}`);
-            setLoading(false);
-        });
     }
+
+
 
     const handleMessages = async () => {
 
