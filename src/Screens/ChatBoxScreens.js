@@ -719,9 +719,9 @@ const ChatBoxScreens = ({
                             handleShowModal,
                             handleModalCancel,
                             deleteModalOpen,
-                            handlePlayCheck,
-                            playedAudio,
-                            deviceName
+                            deviceName,
+                            transcript
+
                         }) => {
 
 

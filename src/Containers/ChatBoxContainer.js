@@ -3,6 +3,7 @@ import ChatBoxScreens from "../Screens/ChatBoxScreens";
 import {useToasts} from "react-toast-notifications";
 import {nanoid} from "nanoid";
 import axios from "axios";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 const ChatBoxContainer = () => {
 
     const {addToast} = useToasts();
@@ -288,7 +289,44 @@ const ChatBoxContainer = () => {
 
     };
 
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition,
+        isMicrophoneAvailable
+    } = useSpeechRecognition();
+    useEffect(()=> {
+        debugger
+        if(listening === false){
+            setMicEnabled(false);
+        }
+        if(transcript){
+            setChatText(transcript)
+        }
+
+    },[listening, transcript])
+
+    if (!browserSupportsSpeechRecognition) {
+        addToast("Browser doesn't support speech recognition." , { appearance: 'error' });
+    }
+    if (!isMicrophoneAvailable) {
+        // Render some fallback content
+        addToast("False speech recognition." , { appearance: 'error' });
+
+    }
+
     const handleMicPermissions = async () => {
+        debugger
+        setMicEnabled(!micEnabled);
+        if(micEnabled){
+            debugger
+            SpeechRecognition.stopListening()
+        }else{
+            debugger
+            SpeechRecognition.startListening()
+        }
+
 
     }
 
@@ -354,6 +392,9 @@ const ChatBoxContainer = () => {
            deleteModalOpen={deleteModalOpen}
            playedAudio={playedAudio}
            deviceName={deviceName}
+           transcript={transcript}
+           SpeechRecognition={SpeechRecognition}
+
 
 
        />
