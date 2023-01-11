@@ -18,6 +18,7 @@ const ChatBoxContainer = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [playedAudio, setPlayedAudio] = useState([]);
     const [deviceName, setDeviceName] = useState('');
+    const [microPermission, setMicroPermission] = useState(false);
 
 
 
@@ -301,7 +302,7 @@ const ChatBoxContainer = () => {
         if(listening === false){
             setMicEnabled(false);
         }
-        if(transcript){
+        if(micEnabled && transcript){
             setChatText(transcript)
         }
 
@@ -310,42 +311,51 @@ const ChatBoxContainer = () => {
     if (!browserSupportsSpeechRecognition) {
         addToast("Browser doesn't support speech recognition." , { appearance: 'error' });
     }
-    if (!isMicrophoneAvailable) {
-        // Render some fallback content
-        addToast("False speech recognition." , { appearance: 'error' });
+    if(!microPermission){
+        if (!isMicrophoneAvailable) {
+            setMicroPermission(true);
+            setMicEnabled(false);
+            debugger
+            // Render some fallback content
+            addToast("Your microphone is not available. Please check!!!" , { appearance: 'error' });
 
+        }
     }
+
 
     const handleMicPermissions = async () => {
         debugger
-        setMicEnabled(!micEnabled);
-        if(micEnabled){
-            debugger
-            SpeechRecognition.stopListening()
-        }else{
-            debugger
-            SpeechRecognition.startListening()
+        if(isMicrophoneAvailable){
+            setMicEnabled(!micEnabled);
+            if(micEnabled){
+                debugger
+                SpeechRecognition.stopListening()
+            }else{
+                debugger
+
+                SpeechRecognition.startListening()
+            }
+
         }
+
+
 
 
     }
 
 
-
-    const handleMessages = async () => {
-
+    const handleSendMessage = async ()=>{
         setLoading(true);
-
         await axios.get(`https://silviaserver.com/SilviaServer/Core/SetInput?user=${userNameToken}&text=${chatText}`)
             .then((resp) => {
 
-                setUserGreetMessages((prevState) => {
-                    const latestState = [...prevState, {from: 'me', type: 'text', message: chatText}]
-                    return latestState;
-                })
+                    setUserGreetMessages((prevState) => {
+                        const latestState = [...prevState, {from: 'me', type: 'text', message: chatText}]
+                        return latestState;
+                    })
                     console.log(resp);
                     setChatText('');
-                handleGreetingMessages(userNameToken, setLoading);
+                    handleGreetingMessages(userNameToken, setLoading);
 
 
 
@@ -358,6 +368,15 @@ const ChatBoxContainer = () => {
                 setLoading(false);
             });
 
+    }
+
+    const handleMessages = async (e) => {
+
+        if(e.keyCode == 13 && e.shiftKey == false) {
+
+            e.preventDefault();
+            handleSendMessage();
+        }
 
 
     }
@@ -394,6 +413,7 @@ const ChatBoxContainer = () => {
            deviceName={deviceName}
            transcript={transcript}
            SpeechRecognition={SpeechRecognition}
+           handleSendMessage={handleSendMessage}
 
 
 

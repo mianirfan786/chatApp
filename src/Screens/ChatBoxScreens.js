@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import styled from 'styled-components';
 import './style.css'
 import {Switch, Input, Modal} from "antd";
@@ -720,9 +720,21 @@ const ChatBoxScreens = ({
                             handleModalCancel,
                             deleteModalOpen,
                             deviceName,
-                            transcript
+                            transcript,
+                            handleSendMessage
 
                         }) => {
+    const bottomRef = useRef(null);
+    useEffect(() => {
+        debugger
+        if(silviaOpen){
+            var objDiv = document.getElementById("scrollWrapper");
+            objDiv.scrollTop = objDiv?.scrollHeight;
+        }
+
+        },[userGreetMessages]);
+
+
 
 
     const { TextArea } = Input;
@@ -831,7 +843,7 @@ const ChatBoxScreens = ({
 
                     <WhiteSectionMainWrapper>
 
-                        <ChatMessagesMainWrapper>
+                        <ChatMessagesMainWrapper id={'scrollWrapper'}>
                            <div className=''>
                                {userGreetMessages?.map((data) =>
                                    data?.from === 'robot'?
@@ -941,16 +953,18 @@ const ChatBoxScreens = ({
                                     autoSize={false}
                                     value={chatText}
                                     onChange={handleChatText}
+                                    onKeyDown={(e)=>handleMessages(e)}
+
                                     placeholder="Type or Say Your Message"
                                 />
-                                {/*<textarea onChange={handleChatText} placeholder={"Type or Say Your Message ..."} />*/}
+                                {/*<textarea onKeyDown={(e)=>handleMessages(e)} onChange={handleChatText} placeholder={"Type or Say Your Message ..."} />*/}
                             </TextChatStyle>
 
                             <TextChatIconsWrapper>
 
                                 {chatText ?
                                     <MicBackgroundStyle bg='black'>
-                                        <RiSendPlaneFill size={18} color={'white'} onClick={ loading ? null : handleMessages} />
+                                        <RiSendPlaneFill size={18} color={'white'} onClick={ loading ? null : handleSendMessage} />
                                     </MicBackgroundStyle>
                                     :
                                     micEnabled ?
