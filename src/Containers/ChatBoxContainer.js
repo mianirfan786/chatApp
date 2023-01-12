@@ -315,32 +315,30 @@ debugger
             // setMicEnabled(false);
         }
         if(micEnabled && transcript){
-
             setChatText(transcript);
             console.log(chatText);
         }
+        if(!isMicrophoneAvailable){
+                // setMicroPermission(true);
+                setMicEnabled(false);
+                debugger
+                // Render some fallback content
+                addToast("Your microphone is not available. Please check!!!" , { appearance: 'error' });
+
+        }
+        if (!browserSupportsSpeechRecognition) {
+            addToast("Browser doesn't support speech recognition." , { appearance: 'error' });
+        }
+
 
     },[listening, transcript])
 
-    // if (!browserSupportsSpeechRecognition) {
-    //     addToast("Browser doesn't support speech recognition." , { appearance: 'error' });
-    // }
-    // if(!microPermission){
-    //     if (!isMicrophoneAvailable) {
-    //         setMicroPermission(true);
-    //         setMicEnabled(false);
-    //         debugger
-    //         // Render some fallback content
-    //         addToast("Your microphone is not available. Please check!!!" , { appearance: 'error' });
-    //
-    //     }
-    // }
+
 
 
     const handleMicPermissions = async () => {
         debugger
-
-
+        if(isMicrophoneAvailable){
             if(micEnabled){
                 debugger
                 setMicEnabled(false);
@@ -350,6 +348,10 @@ debugger
                 setMicEnabled(true);
                 SpeechRecognition.startListening({ continuous: true });
             }
+        }else{
+            addToast('Your microphone is not available. Please check!!!', {appearance: 'error'})
+        }
+
 
 
 

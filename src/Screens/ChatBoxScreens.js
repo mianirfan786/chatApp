@@ -973,18 +973,9 @@ const ChatBoxScreens = ({
 
                                 }
                                 {
-                                    // micEnabled ?
-                                    //     <MicBackgroundStyle bg='green' onClick={loading ? null : handleMicPermissions}>
-                                    //         <BsFillMicFill size={18}/>
-                                    //     </MicBackgroundStyle>
-                                    //     :
-                                    //     <MicBackgroundStyle bg='#8B0000' onClick={loading ? null : handleMicPermissions}>
-                                    //         <BsFillMicMuteFill size={18} />
-                                    //     </MicBackgroundStyle>
-
 
                                     micEnabled ?
-                                        <MicBackgroundStyle bg='green' onClick={loading ? null : handleMicPermissions}  onTouchStart={handleMicPermissions} onMouseDown={handleMicPermissions} onMouseUp={handleMicPermissions} onTouchEnd={handleMicPermissions}>
+                                        <MicBackgroundStyle bg='green' onClick={loading ? null : handleMicPermissions} >
                                             <BsFillMicFill size={18}/>
                                         </MicBackgroundStyle>
                                         :
