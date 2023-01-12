@@ -879,6 +879,7 @@ const ChatBoxScreens = ({
                                                        <UserMessageWrapper>
                                                            { data?.message }
                                                        </UserMessageWrapper>
+                                                   {/*<AudioPlayer autoPlay src={`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=Helo Mian How are you. &vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`}></AudioPlayer>*/}
 
                                                </ChatBoxMessageWrapper>
 
