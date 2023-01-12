@@ -358,7 +358,7 @@ const TextChatStyle = styled.div`
   @media screen and (max-width: 450px){
     & textarea{
       //height: 1%;
-      max-height: 50px!important;
+      max-height: 40px!important;
       border: none;
 
     }
@@ -721,12 +721,14 @@ const ChatBoxScreens = ({
                             deleteModalOpen,
                             deviceName,
                             transcript,
-                            handleSendMessage
+                            handleSendMessage,
+                            SpeechRecognition,
+                            listening
 
                         }) => {
     const bottomRef = useRef(null);
     useEffect(() => {
-        debugger
+
         if(silviaOpen){
             var objDiv = document.getElementById("scrollWrapper");
             objDiv.scrollTop = objDiv?.scrollHeight;
@@ -957,7 +959,7 @@ const ChatBoxScreens = ({
 
                                     placeholder="Type or Say Your Message"
                                 />
-                                {/*<textarea onKeyDown={(e)=>handleMessages(e)} onChange={handleChatText} placeholder={"Type or Say Your Message ..."} />*/}
+
                             </TextChatStyle>
 
                             <TextChatIconsWrapper>
@@ -967,17 +969,28 @@ const ChatBoxScreens = ({
                                         <RiSendPlaneFill size={18} color={'white'} onClick={ loading ? null : handleSendMessage} />
                                     </MicBackgroundStyle>
                                     :
+                                    null
+
+                                }
+                                {
+                                    // micEnabled ?
+                                    //     <MicBackgroundStyle bg='green' onClick={loading ? null : handleMicPermissions}>
+                                    //         <BsFillMicFill size={18}/>
+                                    //     </MicBackgroundStyle>
+                                    //     :
+                                    //     <MicBackgroundStyle bg='#8B0000' onClick={loading ? null : handleMicPermissions}>
+                                    //         <BsFillMicMuteFill size={18} />
+                                    //     </MicBackgroundStyle>
+
+
                                     micEnabled ?
-                                        <MicBackgroundStyle bg='green' onClick={loading ? null : handleMicPermissions}>
+                                        <MicBackgroundStyle bg='green' onClick={loading ? null : handleMicPermissions}  onTouchStart={handleMicPermissions} onMouseDown={handleMicPermissions} onMouseUp={handleMicPermissions} onTouchEnd={handleMicPermissions}>
                                             <BsFillMicFill size={18}/>
                                         </MicBackgroundStyle>
                                         :
                                         <MicBackgroundStyle bg='#8B0000' onClick={loading ? null : handleMicPermissions}>
                                             <BsFillMicMuteFill size={18} />
                                         </MicBackgroundStyle>
-
-
-
                                 }
 
                             </TextChatIconsWrapper>

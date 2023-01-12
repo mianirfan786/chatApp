@@ -3,8 +3,16 @@ import ChatBoxScreens from "../Screens/ChatBoxScreens";
 import {useToasts} from "react-toast-notifications";
 import {nanoid} from "nanoid";
 import axios from "axios";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import { createSpeechlySpeechRecognition } from "@speechly/speech-recognition-polyfill";
+import SpeechRecognition, {
+    useSpeechRecognition,
+} from "react-speech-recognition";
+
+const appId = "afa75d18-0f81-4f20-9ebc-1bb59ad15210";
+const SpeechlySpeechRecognition = createSpeechlySpeechRecognition(appId);
+SpeechRecognition.applyPolyfill(SpeechlySpeechRecognition);
 const ChatBoxContainer = () => {
+
 
     const {addToast} = useToasts();
     const [silviaOpen, setSilviaOpen] = useState(false);
@@ -20,7 +28,8 @@ const ChatBoxContainer = () => {
     const [deviceName, setDeviceName] = useState('');
     const [microPermission, setMicroPermission] = useState(false);
 
-
+    const { resetTranscript,transcript, listening,isMicrophoneAvailable, browserSupportsSpeechRecognition } =
+        useSpeechRecognition();
 
     useEffect(()=> {
 
@@ -49,6 +58,8 @@ const ChatBoxContainer = () => {
 
     const handleGreetingMessages = async (guestUser, setLoading) => {
         setChatText('');
+        resetTranscript();
+        setMicEnabled(false);
     await axios
         .get(`https://silviaserver.com/SilviaServer/Core/GetAll?user=${guestUser}`)
         .then((resp) => {
@@ -70,7 +81,7 @@ const ChatBoxContainer = () => {
                         }
 
                         const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
-                        debugger;
+
 
                         let audio = new Audio(audioUrl);
                         audio.play();
@@ -289,54 +300,57 @@ const ChatBoxContainer = () => {
         setMicEnabled(false);
 
     };
+    //
+    // const {
+    //     transcript,
+    //     listening,
+    //     resetTranscript,
+    //     browserSupportsSpeechRecognition,
+    //     isMicrophoneAvailable
+    // } = useSpeechRecognition();
 
-    const {
-        transcript,
-        listening,
-        resetTranscript,
-        browserSupportsSpeechRecognition,
-        isMicrophoneAvailable
-    } = useSpeechRecognition();
     useEffect(()=> {
-        debugger
+debugger
         if(listening === false){
-            setMicEnabled(false);
+            // setMicEnabled(false);
         }
         if(micEnabled && transcript){
-            setChatText(transcript)
+
+            setChatText(transcript);
+            console.log(chatText);
         }
 
     },[listening, transcript])
 
-    if (!browserSupportsSpeechRecognition) {
-        addToast("Browser doesn't support speech recognition." , { appearance: 'error' });
-    }
-    if(!microPermission){
-        if (!isMicrophoneAvailable) {
-            setMicroPermission(true);
-            setMicEnabled(false);
-            debugger
-            // Render some fallback content
-            addToast("Your microphone is not available. Please check!!!" , { appearance: 'error' });
-
-        }
-    }
+    // if (!browserSupportsSpeechRecognition) {
+    //     addToast("Browser doesn't support speech recognition." , { appearance: 'error' });
+    // }
+    // if(!microPermission){
+    //     if (!isMicrophoneAvailable) {
+    //         setMicroPermission(true);
+    //         setMicEnabled(false);
+    //         debugger
+    //         // Render some fallback content
+    //         addToast("Your microphone is not available. Please check!!!" , { appearance: 'error' });
+    //
+    //     }
+    // }
 
 
     const handleMicPermissions = async () => {
         debugger
-        if(isMicrophoneAvailable){
-            setMicEnabled(!micEnabled);
+
+
             if(micEnabled){
                 debugger
+                setMicEnabled(false);
                 SpeechRecognition.stopListening()
             }else{
                 debugger
-
-                SpeechRecognition.startListening()
+                setMicEnabled(true);
+                SpeechRecognition.startListening({ continuous: true });
             }
 
-        }
 
 
 
@@ -414,6 +428,7 @@ const ChatBoxContainer = () => {
            transcript={transcript}
            SpeechRecognition={SpeechRecognition}
            handleSendMessage={handleSendMessage}
+           listening={listening}
 
 
 
