@@ -160,6 +160,7 @@ const ChatBoxContainer = () => {
 
     const handleGreetingMessages = async (guestUser, setLoading) => {
         setChatText('');
+        setMicEnabled(false);
         setPlayedAudio([]);
         const audios = [];
         await axios
