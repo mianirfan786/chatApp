@@ -647,7 +647,7 @@ const MessageWrapper = styled.div`
 const AudioWrapper = styled.div`
   & audio{
     //width: 200px;
-    display: none;
+    display: block;
 
   }
  
@@ -723,7 +723,8 @@ const ChatBoxScreens = ({
                             transcript,
                             handleSendMessage,
                             SpeechRecognition,
-                            listening
+                            listening,
+                            playedAudio
 
                         }) => {
     const bottomRef = useRef(null);
@@ -893,7 +894,7 @@ const ChatBoxScreens = ({
 
 
                                {/*{playedAudio?.map((data) =>*/}
-                               {/*    data?.from === 'robot'?*/}
+                               {/*    data?.map((message) =>*/}
                                {/*        <RobotProfileWrapper>*/}
 
                                {/*            <div style={{position: 'relative'}}>*/}
@@ -902,10 +903,10 @@ const ChatBoxScreens = ({
                                {/*                        toggleEnabled ?*/}
 
                                {/*                           <AudioWrapper>*/}
-                               {/*                                <audio autoPlay onEnded={()=>alert('end and starting new')}>*/}
-                               {/*                                    <source type='audio/wav'*/}
-                               {/*                                            src={`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${data?.url}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`} />*/}
-                               {/*                                </audio>*/}
+                               {/*                                <AudioPlayer autoPlay src={message} >*/}
+                               {/*                                    /!*<source type='audio/wav'*!/*/}
+                               {/*                                    /!*        src={data} />*!/*/}
+                               {/*                                </AudioPlayer>*/}
                                {/*                           </AudioWrapper>*/}
                                {/*                            : null*/}
                                {/*                    }*/}
@@ -915,28 +916,7 @@ const ChatBoxScreens = ({
 
                                {/*            </div>*/}
                                {/*        </RobotProfileWrapper>*/}
-                               {/*        :*/}
-                               {/*        <UserProfileWrapper>*/}
-
-                               {/*            <div style={{position: 'relative'}}>*/}
-                               {/*                <ChatBoxMessageWrapper>*/}
-                               {/*                    {*/}
-                               {/*                        toggleEnabled ?*/}
-                               {/*                            <AudioWrapper>*/}
-                               {/*                                <audio autoPlay>*/}
-                               {/*                                    <source type='audio/wav' src={`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${data?.url}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`} />*/}
-                               {/*                                </audio>*/}
-                               {/*                            </AudioWrapper>*/}
-                               {/*                            : null*/}
-
-                               {/*                    }*/}
-                               {/*                </ChatBoxMessageWrapper>*/}
-
-                               {/*            </div>*/}
-                               {/*            <UserProfileImageWrapper>*/}
-                               {/*                <BsFillPersonFill size={22} color={'white'} />*/}
-                               {/*            </UserProfileImageWrapper>*/}
-                               {/*        </UserProfileWrapper>*/}
+                               {/*    )*/}
 
                                {/*)}*/}
 

@@ -160,6 +160,7 @@ const ChatBoxContainer = () => {
 
     const handleGreetingMessages = async (guestUser, setLoading) => {
         setChatText('');
+        setPlayedAudio([]);
         const audios = [];
         await axios
             .get(`https://silviaserver.com/SilviaServer/Core/GetAll?user=${guestUser}`)
@@ -170,6 +171,7 @@ const ChatBoxContainer = () => {
                         setLoading(false);
                         if(toggleEnabled){
                             const messages = response[0]?.results;
+                            debugger
                             if(messages[0] !== '[silence]'){
                                 setUserGreetMessages((prevState) => {
                                     const latestState = [...prevState, {
@@ -180,14 +182,15 @@ const ChatBoxContainer = () => {
                                     return latestState;
                                 });
                             }
-
-                            const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
-                            audios.push(audioUrl);
+                            if(messages[1] !== '[silence]') {
+                                const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
+                                audios.push(audioUrl);
+                            }
                             // setPlayedAudio((prevState) => {
                             //     const latestState = [...prevState, {url: audioUrl}];
                             //     return latestState;
                             // });
-
+                            //
 
 
 
@@ -213,15 +216,17 @@ const ChatBoxContainer = () => {
                                             }
                                         } else if (index === 1) {
                                             if (message === '[silence]') {
+                                                debugger
                                             } else {
+                                                debugger
                                                 if(toggleEnabled){
-                                                    const audioUrl2 = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
+                                                    const audioUrl2 = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
                                                     audios.push(audioUrl2);
                                                     // setPlayedAudio((prevState) => {
                                                     //     const latestState = [...prevState, {url: audioUrl2}];
                                                     //     return latestState;
                                                     // });
-                                                    debugger
+                                                    // debugger
 
                                                     console.log(playedAudio, "++++++++");
                                                     //let audio = new Audio(audioUrl2);
@@ -267,20 +272,25 @@ const ChatBoxContainer = () => {
 
                         console.log(`audo lenght => ${audios}`);
                         console.log(audios);
-                        var audio = new Audio(),
-                            i = 0;
+                        setPlayedAudio((prevState) => {
+                            const latestState = [...prevState, audios];
+                            return latestState;
+                        });
+
+                        // var audio = new Audio(),
+                        //     i = 0;
                         //var playlist = new Array('http://www.w3schools.com/htmL/horse.mp3', 'http://demos.w3avenue.com/html5-unleashed-tips-tricks-and-techniques/demo-audio.mp3');
 
-                        audio.addEventListener('ended', function () {
-                            console.log(i);
-                            audio.src = audios[++i];
-                            audio.play();
-                            // audios.splice(i-1,1);
-                        }, true);
-
-                            audio.loop = false;
-                            audio.src = audios[0];
-                            audio.play();
+                        // audio.addEventListener('ended', function () {
+                        //     console.log(i);
+                        //     audio.src = audios[++i];
+                        //     audio.play();
+                        //     // audios.splice(i-1,1);
+                        // }, true);
+                        //
+                        //     audio.loop = false;
+                        //     audio.src = audios[0];
+                        //     audio.play();
 
                     }
                 } else {
@@ -293,6 +303,29 @@ const ChatBoxContainer = () => {
                 setLoading(false);
             });
     };
+    useEffect(()=>{
+        debugger
+        setPlayedAudio([]);
+    }, [toggleEnabled]);
+
+
+    useEffect(()=>{
+        if(toggleEnabled){
+        var audio = new Audio(),
+            i = 0;
+        audio.addEventListener('ended', function () {
+            console.log(i);
+            audio.src = playedAudio?.[0][++i];
+            audio.play();
+        }, false);
+
+            audio.loop = false;
+            audio.src = playedAudio?.[0]?.[0];
+            audio.play();
+        }
+
+    },[playedAudio, toggleEnabled]);
+
 
 
 
@@ -332,7 +365,7 @@ const ChatBoxContainer = () => {
 
     }
 
-
+    console.log(playedAudio, "player++++");
     const InternetErrMessagenger = () => set_isOnline(navigator.onLine===true); // for do like this shortform
 
     useEffect(()=>{
@@ -570,6 +603,7 @@ debugger
            SpeechRecognition={SpeechRecognition}
            handleSendMessage={handleSendMessage}
            listening={listening}
+
 
 
 
