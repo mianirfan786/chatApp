@@ -161,6 +161,7 @@ const ChatBoxContainer = () => {
     const handleGreetingMessages = async (guestUser, setLoading) => {
         setChatText('');
         setMicEnabled(false);
+        resetTranscript();
         setPlayedAudio([]);
         const audios = [];
         await axios
@@ -184,7 +185,7 @@ const ChatBoxContainer = () => {
                                 });
                             }
                             if(messages[1] !== '[silence]') {
-                                const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
+                                const audioUrl = `https://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
                                 audios.push(audioUrl);
                             }
                             // setPlayedAudio((prevState) => {
@@ -221,7 +222,7 @@ const ChatBoxContainer = () => {
                                             } else {
                                                 debugger
                                                 if(toggleEnabled){
-                                                    const audioUrl2 = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
+                                                    const audioUrl2 = `https://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
                                                     audios.push(audioUrl2);
                                                     // setPlayedAudio((prevState) => {
                                                     //     const latestState = [...prevState, {url: audioUrl2}];
@@ -270,6 +271,7 @@ const ChatBoxContainer = () => {
                         // audios.push(`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=hello world&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`);
                         // audios.push(`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=hello Sajid&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`);
                         // audios.push(`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=hello helloooo&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`);
+
 
                         console.log(`audo lenght => ${audios}`);
                         console.log(audios);
