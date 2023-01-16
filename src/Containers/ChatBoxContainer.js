@@ -31,20 +31,6 @@ const ChatBoxContainer = () => {
     const { resetTranscript,transcript, listening,isMicrophoneAvailable, browserSupportsSpeechRecognition } =
         useSpeechRecognition();
 
-    useEffect(()=> {
-
-        console.log( navigator?.userAgent);
-        let userAgentDevice =  navigator?.userAgent;
-
-        if(userAgentDevice?.includes('Android')){
-            setDeviceName('android');
-        }else if(userAgentDevice?.includes('iPhone')){
-            setDeviceName('ios')
-        }
-
-
-    },[])
-
     const handleShowModal = () => {
 
         setDeleteModalOpen(true);
@@ -55,107 +41,6 @@ const ChatBoxContainer = () => {
     };
 
     let interval = null;
-
-    // const handleGreetingMessages = async (guestUser, setLoading) => {
-    //     setChatText('');
-    //     resetTranscript();
-    //     setMicEnabled(false);
-    // await axios
-    //     .get(`https://silviaserver.com/SilviaServer/Core/GetAll?user=${guestUser}`)
-    //     .then((resp) => {
-    //         if (resp?.data?.success === true) {
-    //             const { response } = resp?.data;
-    //             if (response.length > 0) {
-    //                 setLoading(false);
-    //                 if(toggleEnabled){
-    //                     const messages = response[0]?.results;
-    //                     if(messages[0] !== '[silence]'){
-    //                         setUserGreetMessages((prevState) => {
-    //                             const latestState = [...prevState, {
-    //                                 from: 'robot',
-    //                                 type: 'text',
-    //                                 message: messages[0]
-    //                             }]
-    //                             return latestState;
-    //                         });
-    //                     }
-    //
-    //                     const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
-    //
-    //
-    //                     let audio = new Audio(audioUrl);
-    //                     audio.play();
-    //
-    //                     audio.onended = function () {
-    //                         response.forEach(({ results }, index) => {
-    //                             if (index !== 0) {
-    //                                 results?.forEach((message, index) => {
-    //                                     if (index === 0) {
-    //                                         if (message === '[silence]') {
-    //                                         }else{
-    //                                             setUserGreetMessages((prevState) => {
-    //                                                 const latestState = [...prevState, {
-    //                                                     from: 'robot',
-    //                                                     type: 'text',
-    //                                                     message: message
-    //                                                 }]
-    //                                                 return latestState;
-    //                                             });
-    //                                         }
-    //                                     } else if (index === 1) {
-    //                                         if (message === '[silence]') {
-    //                                         } else {
-    //                                             if(toggleEnabled){
-    //                                                 const audioUrl2 = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`;
-    //                                                 let audio = new Audio(audioUrl2);
-    //                                                 audio.play();
-    //                                             }
-    //
-    //                                         }
-    //                                     }
-    //                                 });
-    //                             }
-    //                         });
-    //                     };
-    //
-    //                 }else{
-    //                     response.forEach((messages, index) => {
-    //                         const {results} = messages;
-    //                         results.forEach((message, index) => {
-    //                             if (index === 0) {
-    //                                 if (message === "[silence]") {
-    //
-    //                                 } else {
-    //                                     setUserGreetMessages((prevState) => {
-    //                                         const latestState = [...prevState, {
-    //                                             from: 'robot',
-    //                                             type: 'text',
-    //                                             message: message
-    //                                         }]
-    //                                         return latestState;
-    //                                     })
-    //                                 }
-    //                             }
-    //                         })
-    //                     })
-    //
-    //                 }
-    //
-    //
-    //
-    //
-    //
-    //             }
-    //         } else {
-    //             addToast('success false', { appearance: 'warning' });
-    //         }
-    //     })
-    //     .catch((err) => {
-    //         addToast(err.message, { appearance: 'error' });
-    //         console.log(err?.message);
-    //         setLoading(false);
-    //     });
-    // };
 
 
     const handleGreetingMessages = async (guestUser, setLoading) => {
@@ -185,21 +70,11 @@ const ChatBoxContainer = () => {
                                 });
                             }
                             if(messages[1] !== '[silence]') {
-                                const audioUrl = `https://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
+                                const audioUrl = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${messages[1]}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
                                 audios.push(audioUrl);
                             }
-                            // setPlayedAudio((prevState) => {
-                            //     const latestState = [...prevState, {url: audioUrl}];
-                            //     return latestState;
-                            // });
-                            //
 
 
-
-                            //let audio = new Audio(audioUrl);
-                            //audio.play();
-
-                            //audio.onended = function () {
                             response.forEach(({ results }, index) => {
                                 if (index !== 0) {
                                     results?.forEach((message, index) => {
@@ -218,21 +93,13 @@ const ChatBoxContainer = () => {
                                             }
                                         } else if (index === 1) {
                                             if (message === '[silence]') {
-                                                debugger
-                                            } else {
-                                                debugger
-                                                if(toggleEnabled){
-                                                    const audioUrl2 = `https://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
-                                                    audios.push(audioUrl2);
-                                                    // setPlayedAudio((prevState) => {
-                                                    //     const latestState = [...prevState, {url: audioUrl2}];
-                                                    //     return latestState;
-                                                    // });
-                                                    // debugger
 
-                                                    console.log(playedAudio, "++++++++");
-                                                    //let audio = new Audio(audioUrl2);
-                                                    //audio.play();
+                                            } else {
+
+                                                if(toggleEnabled){
+                                                    const audioUrl2 = `http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=${message}&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=1.1&ssml=false`;
+                                                    audios.push(audioUrl2);
+
                                                 }
 
                                             }
@@ -240,11 +107,10 @@ const ChatBoxContainer = () => {
                                     });
                                 }
                             });
-                            //};
+
 
                         }else{
                             response.forEach((messages, index) => {
-                                console.log('foreach 1111');
                                 const {results} = messages;
                                 results.forEach((message, index) => {
                                     if (index === 0) {
@@ -265,35 +131,11 @@ const ChatBoxContainer = () => {
                             })
 
                         }
-                        console.log('audios files =====>>>');
 
-                        //
-                        // audios.push(`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=hello world&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`);
-                        // audios.push(`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=hello Sajid&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`);
-                        // audios.push(`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=hello helloooo&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`);
-
-
-                        console.log(`audo lenght => ${audios}`);
-                        console.log(audios);
                         setPlayedAudio((prevState) => {
                             const latestState = [...prevState, audios];
                             return latestState;
                         });
-
-                        // var audio = new Audio(),
-                        //     i = 0;
-                        //var playlist = new Array('http://www.w3schools.com/htmL/horse.mp3', 'http://demos.w3avenue.com/html5-unleashed-tips-tricks-and-techniques/demo-audio.mp3');
-
-                        // audio.addEventListener('ended', function () {
-                        //     console.log(i);
-                        //     audio.src = audios[++i];
-                        //     audio.play();
-                        //     // audios.splice(i-1,1);
-                        // }, true);
-                        //
-                        //     audio.loop = false;
-                        //     audio.src = audios[0];
-                        //     audio.play();
 
                     }
                 } else {
@@ -307,7 +149,7 @@ const ChatBoxContainer = () => {
             });
     };
     useEffect(()=>{
-        debugger
+
         setPlayedAudio([]);
     }, [toggleEnabled]);
 
@@ -368,7 +210,6 @@ const ChatBoxContainer = () => {
 
     }
 
-    console.log(playedAudio, "player++++");
     const InternetErrMessagenger = () => set_isOnline(navigator.onLine===true); // for do like this shortform
 
     useEffect(()=>{
@@ -377,17 +218,17 @@ const ChatBoxContainer = () => {
             clearInterval(interval) // for component unmount stop the interval
         }
     },[]);
-    // useEffect(()=> {
-    //     debugger
-    //     if(silviaOpen === true){
-    //         if(chatText === ''){
-    //     const interval = setInterval(() => {
-    //         handleGreetingMessages(userNameToken, setLoading)
-    //     }, 4000);
-    //     return () => clearInterval(interval);
-    //         }
-    //     }
-    // },[silviaOpen, userNameToken, chatText, setLoading]);
+    useEffect(()=> {
+
+        if(silviaOpen === true){
+            if(chatText === ''){
+        const interval = setInterval(() => {
+            handleGreetingMessages(userNameToken, setLoading)
+        }, 4000);
+        return () => clearInterval(interval);
+            }
+        }
+    },[silviaOpen, userNameToken, chatText, setLoading]);
 
 
     const handleSilviaChat = async () => {
@@ -397,34 +238,7 @@ const ChatBoxContainer = () => {
         const checkLocalStorage = localStorage.getItem('userNameToken');
 
         if(checkLocalStorage){
-            // const release = await fetch(`http://162.244.80.91:10870/SilviaServer/Core/Release?user=${checkLocalStorage}`, {
-            //     method: "get",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //         "x-access-token": "token-value",
-            //         'Access-Control-Allow-Origin': '*',
-            //     },
-            // })
-            // const headers = {
-            //     "Content-Type": "application/json",
-            //     "x-access-token": "token-value",
-            //     'Access-Control-Allow-Origin': '*',
-            // }
-            //
-            // const res =   axios.get(`/SilviaServer/Core/Release?user=${checkLocalStorage}`, {headers} )
-            //       .then((resp) => {
-            //           debugger
-            //           console.log(resp)
-            //
-            //
-            //           }
-            //       )
-            //       .catch((err) => {
-            //          debugger
-            //           console.log(err?.response)
-            //       });
 
-            // localStorage.removeItem('userNameToken');
         }else{
             handleUserNameToken();
         }
@@ -438,13 +252,11 @@ const ChatBoxContainer = () => {
          await axios.get(`https://silviaserver.com/SilviaServer/Core/Release?user=${checkLocalStorage}`)
               .then((resp) => {
 
-                  console.log(resp);
                   setUserGreetMessages([]);
                   setDeleteModalOpen(false);
                   setSilviaOpen(false);
                   setToggleEnabled(true);
                   setChatText('');
-                  // addToast("Chat Closed Successfully" , { appearance: 'success' });
                   localStorage.removeItem('userNameToken');
                   }
               )
@@ -465,7 +277,6 @@ const ChatBoxContainer = () => {
     },[]);
 
     const handleSwitchChange = (checked) => {
-        console.log(`switch to ${checked}`);
         setToggleEnabled(!toggleEnabled);
     };
     const handleChatText = (event) => {
@@ -475,28 +286,20 @@ const ChatBoxContainer = () => {
         setMicEnabled(false);
 
     };
-    //
-    // const {
-    //     transcript,
-    //     listening,
-    //     resetTranscript,
-    //     browserSupportsSpeechRecognition,
-    //     isMicrophoneAvailable
-    // } = useSpeechRecognition();
+
 
     useEffect(()=> {
-debugger
-        if(listening === false){
-            // setMicEnabled(false);
-        }
+// debugger
+//         if(listening === false){
+//             // setMicEnabled(false);
+//         }
         if(micEnabled && transcript){
             setChatText(transcript);
-            console.log(chatText);
         }
         if(!isMicrophoneAvailable){
-                // setMicroPermission(true);
+
                 setMicEnabled(false);
-                debugger
+
                 // Render some fallback content
                 addToast("Your microphone is not available. Please check!!!" , { appearance: 'error' });
 
@@ -512,14 +315,13 @@ debugger
 
 
     const handleMicPermissions = async () => {
-        debugger
+
         if(isMicrophoneAvailable){
             if(micEnabled){
-                debugger
                 setMicEnabled(false);
                 SpeechRecognition.stopListening()
             }else{
-                debugger
+
                 setMicEnabled(true);
                 SpeechRecognition.startListening({ continuous: true });
             }
@@ -553,9 +355,7 @@ debugger
                 }
             )
             .catch((err) => {
-
                 addToast(err.message , { appearance: 'error' });
-                console.log(err?.message);
                 setLoading(false);
             });
 
@@ -606,10 +406,6 @@ debugger
            SpeechRecognition={SpeechRecognition}
            handleSendMessage={handleSendMessage}
            listening={listening}
-
-
-
-
        />
     )
 }

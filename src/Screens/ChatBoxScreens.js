@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react'
 import styled from 'styled-components';
 import './style.css'
-import {Switch, Input, Modal} from "antd";
+import {Switch, Input} from "antd";
 import {ClipLoader} from "react-spinners";
 import {CgClose} from 'react-icons/cg';
 import {BsFillMicFill, BsFillMicMuteFill, BsFillPersonFill} from 'react-icons/bs';
@@ -13,10 +13,6 @@ import messageIconSvg from '../Assets/messageSvg.svg';
 import profileImage from '../Assets/profilelogo.png';
 import chatProfileImage from '../Assets/chatSilvia.png';
 import waveBackground from '../Assets/farm.png';
-
-import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
-
 
 
 
@@ -720,14 +716,10 @@ const ChatBoxScreens = ({
                             handleModalCancel,
                             deleteModalOpen,
                             deviceName,
-                            transcript,
                             handleSendMessage,
-                            SpeechRecognition,
-                            listening,
-                            playedAudio
 
                         }) => {
-    const bottomRef = useRef(null);
+
     useEffect(() => {
 
         if(silviaOpen){
@@ -867,8 +859,6 @@ const ChatBoxScreens = ({
 
                                  </ChatBoxMessageWrapper>
 
-
-
                              </div>
                            </RobotProfileWrapper>
                                        :
@@ -880,7 +870,6 @@ const ChatBoxScreens = ({
                                                        <UserMessageWrapper>
                                                            { data?.message }
                                                        </UserMessageWrapper>
-                                                   {/*<AudioPlayer autoPlay src={`http://208.109.188.242:5003/api/tts?voice=en-us/southern_english_female-glow_tts&text=Helo Mian How are you. &vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.002&noiseScale=0.667&lengthScale=0.85&ssml=false`}></AudioPlayer>*/}
 
                                                </ChatBoxMessageWrapper>
 
@@ -890,35 +879,6 @@ const ChatBoxScreens = ({
                                            </UserProfileImageWrapper>
                                        </UserProfileWrapper>
                                )}
-
-
-
-                               {/*{playedAudio?.map((data) =>*/}
-                               {/*    data?.map((message) =>*/}
-                               {/*        <RobotProfileWrapper>*/}
-
-                               {/*            <div style={{position: 'relative'}}>*/}
-                               {/*                <ChatBoxMessageWrapper>*/}
-                               {/*                    {*/}
-                               {/*                        toggleEnabled ?*/}
-
-                               {/*                           <AudioWrapper>*/}
-                               {/*                                <AudioPlayer autoPlay src={message} >*/}
-                               {/*                                    /!*<source type='audio/wav'*!/*/}
-                               {/*                                    /!*        src={data} />*!/*/}
-                               {/*                                </AudioPlayer>*/}
-                               {/*                           </AudioWrapper>*/}
-                               {/*                            : null*/}
-                               {/*                    }*/}
-
-
-                               {/*                </ChatBoxMessageWrapper>*/}
-
-                               {/*            </div>*/}
-                               {/*        </RobotProfileWrapper>*/}
-                               {/*    )*/}
-
-                               {/*)}*/}
 
                            </div>
 
