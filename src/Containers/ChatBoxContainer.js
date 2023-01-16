@@ -58,7 +58,7 @@ const ChatBoxContainer = () => {
                         setLoading(false);
                         if(toggleEnabled){
                             const messages = response[0]?.results;
-                            debugger
+
                             if(messages[0] !== '[silence]'){
                                 setUserGreetMessages((prevState) => {
                                     const latestState = [...prevState, {
@@ -139,7 +139,7 @@ const ChatBoxContainer = () => {
 
                     }
                 } else {
-                    addToast('success false', { appearance: 'warning' });
+                    // addToast('success false', { appearance: 'warning' });
                 }
             })
             .catch((err) => {
@@ -224,7 +224,7 @@ const ChatBoxContainer = () => {
             if(chatText === ''){
         const interval = setInterval(() => {
             handleGreetingMessages(userNameToken, setLoading)
-        }, 4000);
+        }, 6000);
         return () => clearInterval(interval);
             }
         }
